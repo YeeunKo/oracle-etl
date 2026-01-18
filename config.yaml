@@ -1,0 +1,40 @@
+# Oracle ETL Pipeline Backend API Configuration
+# config.yaml
+
+server:
+  port: 8080
+  read_timeout: 30s
+  write_timeout: 300s  # ETL 작업을 위한 긴 타임아웃
+
+app:
+  name: oracle-etl
+  version: 1.0.0
+  environment: development
+
+# Oracle 연결 설정 (Milestone 2에서 구현)
+# oracle:
+#   wallet_path: /opt/wallet
+#   tns_name: oracle_atp_high
+#   username: ${ORACLE_USER}
+#   password: ${ORACLE_PASSWORD}
+#   pool_min: 5
+#   pool_max: 20
+#   fetch_array_size: 1000
+
+# GCS 설정 (Milestone 3에서 구현)
+# gcs:
+#   project_id: ${GCP_PROJECT_ID}
+#   credentials_file: /opt/gcp/service-account.json
+#   default_bucket: oracle-etl-data
+
+# ETL 설정 (Milestone 4에서 구현)
+# etl:
+#   chunk_size: 10000
+#   parallel_tables: 4
+#   retry_attempts: 3
+#   retry_backoff: 1s
+
+# 인증 설정 (Milestone 6에서 구현)
+# auth:
+#   api_key: ${API_KEY}
+#   enable_bearer: true

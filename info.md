@@ -1,0 +1,24 @@
+## 타켓 Oracle ERP 정보
+- 중견기업
+- 기본 정보
+  - 시스템명: Oracle ERP
+  - 시스템 구분: ERP
+- 플랫폼 및 소프트웨어 정보
+  - 플랫폼 종류: Oracle
+  - 개발 언어: Oracle Forms
+  - 플랫폼/애플리케이션 버전: EBS 12.1.2
+  - 라이선스 유형: Processor (CPU 기반)
+- 인프라 현황
+  - 인프라 위치: On-Premise
+- Application Serer(AP) 현황
+  - 구분 / 수량 / 도입 시기 / 사양 / OS 종류 및 버전
+  - 운영(production) / 1 / 2012 / CPU 12Core, 128 GB RAM / AIX 6
+  - 개발(development) / 1 / 2012 / CPU 12Core, 128 GB RAM / AIX 6
+- Database Server (DB) 현황
+  - 구분 / 수량 / 도입 시기 / 사양 / DB 종류 및 버전 / 현재 DB 용량 / 한계 용량 / 월 증가량
+  - 운영(production) / 1 / 2012 / 16 Core, 512 GB RAM / Oracle 11g / 4.7 TB / 5.6 TB / 20GB
+  - 개발(developement) / 1 / 2012 / 12 Core, 128 GB RAM / Oracle 11g / 151 GB / 193 GB / 5GB
+- 사용 현황
+  - 활성 사용자 수 : 약 400명
+  - 일 평균 접속자 수 : 약 100명
+  - 피크 타임 동시 접속자 수 : 약 300명

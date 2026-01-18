@@ -1,12 +1,15 @@
 # Oracle ETL Pipeline
 
 [![Go Version](https://img.shields.io/badge/Go-1.23+-00ADD8?style=flat&logo=go)](https://golang.org)
+[![Next.js](https://img.shields.io/badge/Next.js-16.1-black?style=flat&logo=next.js)](https://nextjs.org)
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=flat&logo=react)](https://reactjs.org)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-Oracle DB에서 Google Cloud Storage로 데이터를 추출하는 고성능 ETL 파이프라인 백엔드 API
+Oracle DB에서 Google Cloud Storage로 데이터를 추출하는 고성능 ETL 파이프라인 - 백엔드 API와 웹 대시보드 포함
 
 ## 주요 기능
 
+### 백엔드 API
 - **Oracle DB 연결 및 데이터 추출**: godror 드라이버를 사용한 고성능 데이터 추출
 - **GCS 스트리밍 업로드**: JSONL + Gzip 형식으로 실시간 스트리밍 업로드
 - **실시간 진행률 모니터링**: Server-Sent Events (SSE)를 통한 실시간 상태 추적
@@ -14,7 +17,17 @@ Oracle DB에서 Google Cloud Storage로 데이터를 추출하는 고성능 ETL 
 - **병렬 테이블 처리**: 최대 134K rows/sec 처리 성능
 - **Graceful Shutdown**: 진행 중인 작업 안전 종료 지원
 
+### 웹 대시보드 (Next.js)
+- **대시보드**: 시스템 통계, 실행 중인 작업, 최근 이력을 한눈에 확인
+- **Transport 관리**: Transport 생성, 목록 조회, 상세 정보 확인
+- **Job 모니터링**: 실시간 진행률 표시, SSE 기반 상태 업데이트
+- **Oracle 테이블 탐색**: 연결된 Oracle DB의 테이블 목록 조회
+- **설정 관리**: API 키 설정 및 연결 테스트
+- **다크 모드 지원**: 사용자 선호에 따른 테마 전환
+
 ## 기술 스택
+
+### 백엔드
 
 | 분류 | 기술 |
 |------|------|
@@ -27,13 +40,31 @@ Oracle DB에서 Google Cloud Storage로 데이터를 추출하는 고성능 ETL 
 | 인증 | JWT (golang-jwt/jwt/v5) |
 | 테스트 | testify |
 
+### 프론트엔드
+
+| 분류 | 기술 |
+|------|------|
+| 프레임워크 | Next.js 16.1 (App Router, Turbopack) |
+| UI 라이브러리 | React 19 |
+| 상태 관리 | TanStack Query v5, Zustand |
+| UI 컴포넌트 | shadcn/ui, Radix UI |
+| 스타일링 | Tailwind CSS 4 |
+| 폼 관리 | React Hook Form, Zod |
+| 차트 | Recharts |
+| 테스트 | Playwright |
+
 ## 빠른 시작
 
 ### 사전 요구사항
 
+**백엔드:**
 - Go 1.23 이상
 - Oracle Instant Client (godror 드라이버 요구사항)
 - GCP 서비스 계정 (GCS 접근용)
+
+**프론트엔드:**
+- Node.js 20 이상
+- npm 또는 yarn
 
 ### 설치
 
@@ -42,11 +73,13 @@ Oracle DB에서 Google Cloud Storage로 데이터를 추출하는 고성능 ETL 
 git clone https://github.com/your-org/oracle-etl.git
 cd oracle-etl
 
-# 의존성 설치
+# 백엔드 의존성 설치 및 빌드
 go mod download
-
-# 빌드
 go build -o bin/oracle-etl ./cmd/server
+
+# 프론트엔드 의존성 설치
+cd web
+npm install
 ```
 
 ### 설정
@@ -114,6 +147,8 @@ auth:
 
 ### 실행
 
+**백엔드 서버:**
+
 ```bash
 # 직접 실행
 go run ./cmd/server
@@ -124,6 +159,23 @@ go run ./cmd/server
 # 설정 파일 지정
 CONFIG_PATH=/path/to/config.yaml ./bin/oracle-etl
 ```
+
+**프론트엔드 개발 서버:**
+
+```bash
+cd web
+
+# 개발 모드 실행 (http://localhost:3000)
+npm run dev
+
+# 프로덕션 빌드
+npm run build
+
+# 프로덕션 서버 실행
+npm run start
+```
+
+> **참고**: 프론트엔드는 백엔드 API(`http://localhost:8080`)에 프록시되도록 설정되어 있습니다. 백엔드 서버가 먼저 실행되어야 합니다.
 
 ## API 엔드포인트
 
@@ -196,6 +248,25 @@ oracle-etl/
 │   ├── compress/         # 압축 유틸리티
 │   ├── jsonl/            # JSONL 인코딩
 │   └── pool/             # 워커 풀
+├── web/                  # 프론트엔드 (Next.js)
+│   ├── src/
+│   │   ├── app/          # App Router 페이지
+│   │   │   ├── page.tsx          # 대시보드
+│   │   │   ├── transports/       # Transport 관리
+│   │   │   ├── jobs/             # Job 모니터링
+│   │   │   ├── tables/           # Oracle 테이블
+│   │   │   └── settings/         # 설정
+│   │   ├── components/   # React 컴포넌트
+│   │   │   ├── ui/               # shadcn/ui 컴포넌트
+│   │   │   ├── layout/           # 레이아웃 컴포넌트
+│   │   │   ├── dashboard/        # 대시보드 컴포넌트
+│   │   │   ├── transport/        # Transport 컴포넌트
+│   │   │   └── job/              # Job 컴포넌트
+│   │   ├── lib/          # 유틸리티 함수
+│   │   ├── hooks/        # 커스텀 React 훅
+│   │   └── stores/       # Zustand 상태 관리
+│   ├── package.json
+│   └── next.config.ts
 ├── benchmarks/           # 벤치마크 테스트
 ├── tests/
 │   ├── e2e/              # E2E 테스트
@@ -208,6 +279,8 @@ oracle-etl/
 자세한 아키텍처 설명은 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)를 참조하세요.
 
 ## 테스트
+
+**백엔드 테스트:**
 
 ```bash
 # 단위 테스트 실행
@@ -222,6 +295,18 @@ go tool cover -html=coverage.out -o coverage.html
 
 # 벤치마크 테스트
 go test -bench=. ./benchmarks/...
+```
+
+**프론트엔드 테스트:**
+
+```bash
+cd web
+
+# Lint 검사
+npm run lint
+
+# Playwright E2E 테스트
+npx playwright test
 ```
 
 ## 성능

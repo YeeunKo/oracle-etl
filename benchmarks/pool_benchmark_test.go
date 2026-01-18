@@ -12,10 +12,20 @@ import (
 
 // BenchmarkWorkerPool_Submit은 워커 풀의 작업 제출 성능을 측정합니다
 func BenchmarkWorkerPool_Submit(b *testing.B) {
-	ctx := context.Background()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
 	wp := pool.NewWorkerPool(4)
 	wp.Start(ctx)
-	defer wp.Stop()
+
+	// 결과 소비 goroutine (교착 상태 방지)
+	done := make(chan struct{})
+	go func() {
+		defer close(done)
+		for range wp.Results() {
+			// 결과 소비
+		}
+	}()
 
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -27,7 +37,10 @@ func BenchmarkWorkerPool_Submit(b *testing.B) {
 			},
 		})
 	}
+
+	// 작업 완료 대기 후 결과 채널 닫힘
 	wp.Wait()
+	<-done
 }
 
 // BenchmarkWorkerPool_ConcurrencyLevels는 다양한 동시성 레벨에서 성능을 측정합니다
@@ -66,10 +79,20 @@ func BenchmarkWorkerPool_ConcurrencyLevels(b *testing.B) {
 
 // BenchmarkWorkerPool_Throughput은 워커 풀의 처리량을 측정합니다
 func BenchmarkWorkerPool_Throughput(b *testing.B) {
-	ctx := context.Background()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
 	wp := pool.NewWorkerPool(8)
 	wp.Start(ctx)
-	defer wp.Stop()
+
+	// 결과 소비 goroutine (교착 상태 방지)
+	done := make(chan struct{})
+	go func() {
+		defer close(done)
+		for range wp.Results() {
+			// 결과 소비
+		}
+	}()
 
 	var processed int64
 
@@ -86,7 +109,10 @@ func BenchmarkWorkerPool_Throughput(b *testing.B) {
 			})
 		}
 	})
+
+	// 작업 완료 대기 후 결과 채널 닫힘
 	wp.Wait()
+	<-done
 
 	b.ReportMetric(float64(processed)/b.Elapsed().Seconds(), "tasks/sec")
 }

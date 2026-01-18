@@ -62,6 +62,11 @@ func (p *WorkerPool) Workers() int {
 	return p.workers
 }
 
+// Results는 결과 채널을 반환합니다 (비동기 결과 소비용)
+func (p *WorkerPool) Results() <-chan Result {
+	return p.results
+}
+
 // Start는 워커 풀을 시작합니다
 func (p *WorkerPool) Start(ctx context.Context) {
 	if !atomic.CompareAndSwapInt32(&p.started, 0, 1) {
@@ -127,11 +132,13 @@ func (p *WorkerPool) executeTask(task Task) {
 		Duration:  endTime.Sub(startTime),
 	}
 
+	// 컨텍스트 취소를 체크하며 결과 전송 (교착 상태 방지)
 	select {
 	case p.results <- result:
-	default:
-		// 결과 채널이 가득 찬 경우 (비정상적 상황)
-		p.results <- result // 블로킹 전송
+		// 정상 전송
+	case <-p.ctx.Done():
+		// 컨텍스트 취소됨 - 결과 드롭
+		return
 	}
 
 	atomic.AddInt32(&p.taskCount, -1)

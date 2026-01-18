@@ -7,7 +7,7 @@
 | SPEC ID | SPEC-ETL-001 |
 | Title | Oracle DB to Google Cloud Storage ETL Pipeline Backend API |
 | Created | 2026-01-18 |
-| Status | Planned |
+| Status | Completed |
 | Priority | High |
 | Lifecycle | spec-anchored |
 | Version | 1.0.0 |

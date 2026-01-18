@@ -1,0 +1,56 @@
+[
+  {
+    "url": "http://localhost:3000/",
+    "name": "dashboard",
+    "status": "OK",
+    "consoleErrors": [],
+    "jsErrors": [],
+    "hasVisibleErrors": false,
+    "screenshotPath": "screenshots/dashboard.png"
+  },
+  {
+    "url": "http://localhost:3000/transports",
+    "name": "transports",
+    "status": "OK",
+    "consoleErrors": [],
+    "jsErrors": [],
+    "hasVisibleErrors": false,
+    "screenshotPath": "screenshots/transports.png"
+  },
+  {
+    "url": "http://localhost:3000/transports/new",
+    "name": "transports-new",
+    "status": "OK",
+    "consoleErrors": [],
+    "jsErrors": [],
+    "hasVisibleErrors": false,
+    "screenshotPath": "screenshots/transports-new.png"
+  },
+  {
+    "url": "http://localhost:3000/jobs",
+    "name": "jobs",
+    "status": "OK",
+    "consoleErrors": [],
+    "jsErrors": [],
+    "hasVisibleErrors": false,
+    "screenshotPath": "screenshots/jobs.png"
+  },
+  {
+    "url": "http://localhost:3000/settings",
+    "name": "settings",
+    "status": "OK",
+    "consoleErrors": [],
+    "jsErrors": [],
+    "hasVisibleErrors": false,
+    "screenshotPath": "screenshots/settings.png"
+  },
+  {
+    "url": "http://localhost:3000/tables",
+    "name": "tables",
+    "status": "OK",
+    "consoleErrors": [],
+    "jsErrors": [],
+    "hasVisibleErrors": false,
+    "screenshotPath": "screenshots/tables.png"
+  }
+]
